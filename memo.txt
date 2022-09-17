@@ -1,0 +1,54 @@
+アプリケーションエンジニアから見たPostgreSQL15の新機能
+
+・ アプリケーションエンジニア, Amazon RDSで導入されてラッキーって使う.
+    ・ DBA的な働き方はしてない
+
+- PostgreSQL15の新機能
+    - Merge文サポート
+    - パラレルクエリの強化
+    - ロジカルレプリケーションの強化
+
+- PostgreSQLのリリースサイクル
+    - 毎年9~10月に新しいメジャーバージョンをリリース
+    - https://postgresweb.com/post-5471
+    - https://www.slideshare.net/masahikosawada98/postgresql-15
+
+
+- Merge文
+    - https://ja.wikipedia.org/wiki/MERGE_(SQL)
+    - SQL:2003の標準
+    - 一文で INSERT,UPDATE,DELETEが実現できる
+- UPSERT, INSERT on coflict の違い
+    - 一度結合してテーブルを作ってから条件に合うものを処理する
+    - INSERT on conflict は 一度 insert を試みて conflictエラーが発生したら update となる
+    - パフォーマンス的には MERGE文の方が良い
+    - https://qiita.com/fujii_masao/items/462bac9f6a107d6134c4
+
+- パラレルクエリーについて
+    - SELECT DISTINCT で パラレルクエリー
+    - パラレルクエリって何？
+
+- ロジカルレプリケーションについて
+    - ロジカル・レプリケーションは PostgreSQL 15 で大きく拡張されました。ロジカル・レ
+プリケーションで特定の条件に合致するタプルのみレプリケーションできるようになりま
+した。レプリケーションできるタプルの条件は CREATE PUBLICATION 文や ALTER
+PUBLICATION 文に WHERE 句を指定します。レプリケーション対象列を選択できるよ
+うになりました。CREATE PUBLICATION 文にテーブルに加えて列のリストを指定しま
+す。また指定した LSN の更新をスキップできるようになりました。
+
+- JSON構文のサポート
+    - 
+
+2.6.1. PUBLIC スキーマに対するアクセス権
+従来は public スキーマには全ユーザー（PUBLIC）に対して CREATE 権限、USAGE 権
+限が付与されていました。PostgreSQL 15 では public スキーマに対するアクセス権限はデ
+ータベース所有者（pg_database_owner ロール）に限られます。public スキーマのオーナ
+ーも pg_database_owner に変更されました。この修正により CVE-2018-1058 以降に推奨
+された状態になります。
+
+- リテラル
+    - 123abc は 123 as abc と解釈されてたけどエラーになる
+
+- pg_upgrade
+    - 9.2より前のバージョンからのサポートがなくなった
+- 
