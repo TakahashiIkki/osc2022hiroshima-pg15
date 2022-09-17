@@ -7,6 +7,8 @@
     - Merge文サポート
     - パラレルクエリの強化
     - ロジカルレプリケーションの強化
+    - バージョン非互換対応
+        - PublicスキーマのCreate権限がデフォルトからなくなる
 
 - PostgreSQLのリリースサイクル
     - 毎年9~10月に新しいメジャーバージョンをリリース
@@ -40,11 +42,35 @@ PUBLICATION 文に WHERE 句を指定します。レプリケーション対象�
     - 
 
 2.6.1. PUBLIC スキーマに対するアクセス権
+https://dev.classmethod.jp/articles/postgresql-15-revoke-create-on-public-schema/
 従来は public スキーマには全ユーザー（PUBLIC）に対して CREATE 権限、USAGE 権
 限が付与されていました。PostgreSQL 15 では public スキーマに対するアクセス権限はデ
 ータベース所有者（pg_database_owner ロール）に限られます。public スキーマのオーナ
 ーも pg_database_owner に変更されました。この修正により CVE-2018-1058 以降に推奨
 された状態になります。
+
+PostgreSQL15 , public スキーマの権限は データベースのオーナーだけがオブジェクトを作成できる
+- オブジェクトとは？
+    - ユーザーを作って、publicスキーマにテーブルを作成すると怒られる
+        - なぜなら public スキーマのオーナー は pg_database_owner に変更された.
+    - 自身が所有するデータベースのpublicスキーマにはテーブルを作成できる
+- バージョンアップではどのように振る舞うのか？
+    - https://andreas.scherbaum.la/blog/archives/1120-Changes-to-the-public-schema-in-PostgreSQL-15-and-how-to-handle-upgrades.html
+    - dump & restore と pg_upgrade の2種類がある
+    - dump & restore
+        - pg_dump によって行う
+        - pg_restore を行って restore .
+            - 新しいデータベースにdumpをrestore する事で行われる
+            - ソースに template0 を使用する
+            - 空のデータベースを作成して、リストアする
+                - 当然、作成時点では public 権限が無いので publicスキーマの書き込み権限はない.
+    - pg_upgrade
+        - すべてが以前のバージョンと同じようにコピーされる
+        - public スキーマには create 権限がある状態
+    - RDS, Aurora PostgreSQL でも pg_upgrade が使用されてるらしいので、一旦は大丈夫かも？
+        - https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/USER_UpgradeDBInstance.PostgreSQL.html
+    - セキュリティ的な問題はずっとある
+
 
 - リテラル
     - 123abc は 123 as abc と解釈されてたけどエラーになる
