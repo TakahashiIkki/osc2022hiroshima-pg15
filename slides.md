@@ -61,46 +61,73 @@ css: unocss
 
 - 日本PostgreSQLユーザー会中国地方支部長ではありますが、普段は普通にWebアプリケーションのコードを書いてていわゆるDBA的な仕事はしていません。
   - 割とPostgreSQLやMySQLはAWSのAmazon RDSでシュッと導入して使っています。
-
- <br>
-
 - 本セッションでは、今回のPostgreSQL15に入る機能をアプリケーションエンジニアとしての立場からピックアップをした上でご紹介をさせていただければと思います。
 
 ---
+layout: center
+class: text-center
+---
 
-# What is Slidev?
+# 2. PostgreSQLとは
 
-Slidev is a slides maker and presenter designed for developers, consist of the following features
+---
 
-- 📝 **Text-based** - focus on the content with Markdown, and then style them later
-- 🎨 **Themable** - theme can be shared and used with npm packages
-- 🧑‍💻 **Developer Friendly** - code highlighting, live coding with autocompletion
-- 🤹 **Interactive** - embedding Vue components to enhance your expressions
-- 🎥 **Recording** - built-in recording and camera view
-- 📤 **Portable** - export into PDF, PNGs, or even a hostable SPA
-- 🛠 **Hackable** - anything possible on a webpage
+# 2. PostgreSQLとは
 
-<br>
-<br>
+<div class="grid grid-cols-2 gap-4">
 
-Read more about [Why Slidev?](https://sli.dev/guide/why)
+<div>
+<ul>
+  <li>代表的なオープンソースのRDBMSの一つ</li>
+  <li>もともと、大学の研究用に開発された研究用のRDBMSの <code>ingress</code> が元となっている。</li>
+  <li>PostgreSQL開発コミュニティによって開発が行われていて、約1年弱の開発期間を経た後、毎年9~10月頃にメジャーバージョンがリリースされている。</li>
+  <li>今年は<code>PostgreSQL15</code>のリリースに向けて開発が行われており、2022-10-06にGAの予定が発表された</li>
+</ul>
+</div>
 
-<!--
-You can have `style` tag in markdown to override the style for the current page.
-Learn more: https://sli.dev/guide/syntax#embedded-styles
--->
+<div>
+  <Tweet id="1571857779643777024" />
+</div>
 
-<style>
-h1 {
-  background-color: #2B90B6;
-  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
-  background-size: 100%;
-  -webkit-background-clip: text;
-  -moz-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  -moz-text-fill-color: transparent;
-}
-</style>
+</div>
+
+---
+
+# PostgreSQLの特徴
+
+<div class="grid grid-cols-2 gap-10">
+
+<div>
+  <h2>複数のIndexアルゴリズムを<br>サポート</h2>
+  <ul>
+    <li>B-Tree Index</li>
+    <li>Hash Index</li>
+    <li>GiST Index, SP-GiST index, GIN Index</li>
+    <li>BRIN Index</li>
+  </ul>
+</div>
+
+<div>
+  <h2>豊富なデータ型をサポート</h2>
+  <ul>
+    <li>数値型, 文字型, boolean型, 列挙型</li>
+    <li>UUID型</li>
+    <li>JSON型</li>
+    <li>配列型</li>
+    <li>範囲型</li>
+    <li>
+      幾何データ型
+      <ul>
+        <li>座標点</li>
+        <li>直線</li>
+        <li>円</li>
+      </ul>
+    </li>
+    <li>IPアドレス型</li>
+  </ul>
+</div>
+
+</div>
 
 ---
 
