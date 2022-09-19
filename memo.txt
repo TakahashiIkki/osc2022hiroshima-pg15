@@ -15,6 +15,8 @@
     - https://postgresweb.com/post-5471
     - https://www.slideshare.net/masahikosawada98/postgresql-15
 
+https://www.postgresql.org/message-id/442d5ddd-ae86-b6a0-0504-a93ec745e9a2%40postgresql.org
+https://twitter.com/nori_shinoda/status/1571857779643777024
 
 - Merge文
     - https://ja.wikipedia.org/wiki/MERGE_(SQL)
