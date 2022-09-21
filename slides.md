@@ -39,20 +39,17 @@ css: unocss
 # 自己紹介
 
 <div class="grid grid-cols-2 gap-4">
-
-<div>
-  <ul>
-    <li>高橋 一騎 (<a href="https://twitter.com/ikkitang">@ikkitang</a>)</li>
-    <li>岡山在住</li>
-    <li>スターフェスティバル株式会社<br>TechPdM 兼 アプリケーションエンジニア</li>
-    <li>日本PostgreSQLユーザー会 中国地方支部長</li>
-  </ul>
-</div>
-
-<div class="">
-  <img src="/images/icon.png" alt="icon" class="rounded-1/2"/>
-</div>
-
+  <div>
+    <ul>
+      <li>高橋 一騎 (<a href="https://twitter.com/ikkitang">@ikkitang</a>)</li>
+      <li>岡山在住</li>
+      <li>スターフェスティバル株式会社<br>TechPdM 兼 アプリケーションエンジニア</li>
+      <li>日本PostgreSQLユーザー会 中国地方支部長</li>
+    </ul>
+  </div>
+  <div>
+    <img src="/images/icon.png" alt="icon" class="rounded-1/2"/>
+  </div>
 </div>
 
 ---
@@ -75,20 +72,17 @@ class: text-center
 # 2. PostgreSQLとは
 
 <div class="grid grid-cols-2 gap-4">
-
-<div>
-<ul>
-  <li>代表的なオープンソースのRDBMSの一つ</li>
-  <li>もともと、大学の研究用に開発された研究用のRDBMSの <code>ingress</code> が元となっている。</li>
-  <li>PostgreSQL開発コミュニティによって開発が行われていて、約1年弱の開発期間を経た後、毎年9~10月頃にメジャーバージョンがリリースされている。</li>
-  <li>今年は<code>PostgreSQL15</code>のリリースに向けて開発が行われており、2022-10-06にGAの予定が発表された</li>
-</ul>
-</div>
-
-<div>
-  <Tweet id="1571857779643777024" />
-</div>
-
+  <div>
+    <ul>
+      <li>代表的なオープンソースのRDBMSの一つ</li>
+      <li>もともと、大学の研究用に開発された研究用のRDBMSの <code>ingress</code> が元となっている。</li>
+      <li>PostgreSQL開発コミュニティによって開発が行われていて、約1年弱の開発期間を経た後、毎年9~10月頃にメジャーバージョンがリリースされている。</li>
+      <li>今年は<code>PostgreSQL15</code>のリリースに向けて開発が行われており、2022-10-06にGAの予定が発表された</li>
+    </ul>
+  </div>
+  <div>
+    <Tweet id="1571857779643777024" />
+  </div>
 </div>
 
 ---
@@ -129,32 +123,26 @@ class: text-center
 
 ---
 
-# Navigation
+# PostgreSQLのバージョニング
 
-Hover on the bottom-left corner to see the navigation's controls panel, [learn more](https://sli.dev/guide/navigation.html)
+- 10より前は `x.y.z` の `x.y`の部分がメジャーバージョン
+  - 8.4 => 9.1 => 9.2 => 9.3 （年単位でバージョンアップ)
+- 10移行は `x.y` の `x` の部分がメジャーバージョン
+  - 10.0 => 11.0 => 12.0 (年単位でバージョンアップ)
+  - EOLはリリースから5年間と定められているので今ではサポートされているのはすべて`x.y`の形式
 
-### Keyboard Shortcuts
-
-|                                                    |                             |
-| -------------------------------------------------- | --------------------------- |
-| <kbd>right</kbd> / <kbd>space</kbd>                | next animation or slide     |
-| <kbd>left</kbd> / <kbd>shift</kbd><kbd>space</kbd> | previous animation or slide |
-| <kbd>up</kbd>                                      | previous slide              |
-| <kbd>down</kbd>                                    | next slide                  |
-
-<!-- https://sli.dev/guide/animations.html#click-animations -->
-
-<img
-  v-click
-  class="absolute -bottom-9 -left-7 w-80 opacity-50"
-  src="https://sli.dev/assets/arrow-bottom-left.svg"
-/>
-
-<p v-after class="absolute bottom-23 left-45 opacity-30 transform -rotate-10">Here!</p>
+<!--
+10からx.y形式になった経緯を調べていたんですが、x.y形式にする事で毎年xの部分を上げる事が明確になるというメリットのためだそうです。
+x.y.zの形式の頃はxの部分を上げる明確な基準がなくて各大きな機能開発のタイミングで上げてたという敬意があって、
+毎年「今回はxを上げるか？」という議論がされてた、という話がありました。
+-->
 
 ---
-layout: image-right
-image: https://source.unsplash.com/collection/94734566/1920x1080
+layout: center
+---
+
+# 今日はそんなPostgreSQL15の話
+
 ---
 
 # Code
