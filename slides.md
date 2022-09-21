@@ -96,37 +96,35 @@ class: text-center
 # PostgreSQLの特徴
 
 <div class="grid grid-cols-2 gap-10">
-
-<div>
-  <h2>複数のIndexアルゴリズムを<br>サポート</h2>
-  <ul>
-    <li>B-Tree Index</li>
-    <li>Hash Index</li>
-    <li>GiST Index, SP-GiST index, GIN Index</li>
-    <li>BRIN Index</li>
-  </ul>
-</div>
-
-<div>
-  <h2>豊富なデータ型をサポート</h2>
-  <ul>
-    <li>数値型, 文字型, boolean型, 列挙型</li>
-    <li>UUID型</li>
-    <li>JSON型</li>
-    <li>配列型</li>
-    <li>範囲型</li>
-    <li>
-      幾何データ型
-      <ul>
-        <li>座標点</li>
-        <li>直線</li>
-        <li>円</li>
-      </ul>
-    </li>
-    <li>IPアドレス型</li>
-  </ul>
-</div>
-
+  <div>
+    <h2>複数のIndexアルゴリズムを<br>サポート</h2>
+    <ul>
+      <li>B-Tree Index</li>
+      <li>Hash Index</li>
+      <li>GiST Index, SP-GiST index, GIN Index</li>
+      <li>BRIN Index</li>
+    </ul>
+  </div>
+  
+  <div>
+    <h2>豊富なデータ型をサポート</h2>
+    <ul>
+      <li>数値型, 文字型, boolean型, 列挙型</li>
+      <li>UUID型</li>
+      <li>JSON型</li>
+      <li>配列型</li>
+      <li>範囲型</li>
+      <li>
+        幾何データ型
+        <ul>
+          <li>座標点</li>
+          <li>直線</li>
+          <li>円</li>
+        </ul>
+      </li>
+      <li>IPアドレス型</li>
+    </ul>
+  </div>
 </div>
 
 ---
