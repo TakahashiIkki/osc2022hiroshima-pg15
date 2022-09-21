@@ -8,6 +8,8 @@ info: |
   アプリケーションエンジニアから見たPostgreSQL15 の新機能
    2022-10-01 OSC 2022 オンライン広島
 drawings:
+  enabled: true
+  presenterOnly: true
   persist: false
 css: unocss
 
@@ -144,43 +146,144 @@ layout: center
 # 今日はそんなPostgreSQL15の話
 
 ---
+layout: center
+---
 
-# Code
+# 3. PostgreSQL15の新機能
 
-Use code snippets and get the highlighting directly![^1]
+---
 
-```ts {all|2|1-6|9|all}
-interface User {
-  id: number;
-  firstName: string;
-  lastName: string;
-  role: string;
-}
+# 3. PostgreSQL15の新機能（抜粋）
 
-function updateUser(id: number, update: User) {
-  const user = getUser(id);
-  const newUser = { ...user, ...update };
-  saveUser(id, newUser);
-}
+- Merge文のサポート
+- パラレルクエリの強化
+- ロジカルレプリケーションの強化
+- バージョン非互換対応（新機能ではないけど）
+  - PublicスキーマのCreate権限がデフォルトからなくなる
+
+---
+
+# Merge文のサポート
+
+<div class="grid grid-cols-2 gap-4">
+  <div>
+    <ul>
+      <li>INSERT・UPDATE・DELETEを一括で処理できる。</li>
+      <li>SQL:2003で標準SQLとして定義されていて、OracleやSQL Serverではすでにサポートされている。</li>
+      <li>
+        条件に合致したとき（<code>WHEN MATCHED 句</code>）
+        <ul>
+          <li>UPDATE</li>
+          <li>DELETE</li>
+          <li>DO NOTHING: 何も処理しない</li>
+        </ul>
+      </li>
+      <li>
+        条件に合致しなかったとき<br>（<code>WHEN NOT MATCHED 句</code>）
+        <ul>
+          <li>INSERT</li>
+          <li>DO NOTHING: 何も処理しない</li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+  <div>
+
+例
+
+```sql
+MERGE INTO members
+
+ USING (VALUES (1, 'test@example.com', 'test name')) 
+   AS i(member_id, email, user_name)
+   ON members.id = i.member_id
+
+ WHEN MATCHED THEN
+      UPDATE SET user_name = i.user_name
+ WHEN NOT MATCHED THEN
+      INSERT (member_id, email, user_name) 
+      VALUES (i.member_id, i.email, i.user_name);
 ```
 
-<arrow v-click="3" x1="400" y1="420" x2="230" y2="330" color="#564" width="3" arrowSize="1" />
+`WHEN MATCHED` 句では条件を複数記述できる
 
-[^1]: [Learn More](https://sli.dev/guide/syntax.html#line-highlighting)
+```sql
+WHEN MATCHED AND hoge.flag = 1 THEN 
+```
+
+  </div>
+</div>
+
+---
+
+# UPSERT文
+
+- INSERT・UPDATEを組み合わせた操作を行う事からUPSERTと呼ばれる。
+- PostgreSQLにはすでに`UPSERT`相当の機能がある
+- 以下2つは成功時の結果が同じ
+
+<br>
+
+<div class="grid grid-cols-2 gap-4">
+  <div>
+
+MERGE文
+
+```sql
+MERGE INTO members
+ USING (VALUES (1, 'test@example.com', 'test name')) 
+   AS i(member_id, email, user_name)
+   ON members.id = i.member_id
+ WHEN MATCHED THEN
+      UPDATE SET user_name = i.user_name
+ WHEN NOT MATCHED THEN
+      INSERT (member_id, email, user_name) 
+      VALUES (i.member_id, i.email, i.user_name);
+```
+
+  </div>
+  <div>
+
+INSERT ON CONFLICT句
+
+```sql
+INSERT INTO members (member_id, email, user_name)
+ VALUES (1, 'test@example.com', 'test name')
+ ON CONFLICT(member_id)
+ DO UPDATE SET user_name = 'test name';
+```
+
+  </div>
+</div>
+
+---
+
+# UPSERT文の違い
 
 <style>
-.footnotes-sep {
-  @apply mt-20 opacity-10;
-}
-.footnotes {
-  @apply text-sm opacity-75;
-}
-.footnote-backref {
-  display: none;
+table td, table th {
+  border: 1px solid #FFF;
 }
 </style>
 
+| 項目       | MERGE                                                                                        | INSERT ON CONFLICT                                           |
+|----------|----------------------------------------------------------------------------------------------|--------------------------------------------------------------|
+| 処理速度     | 簡易比較ではこちらの方が10~100%程高速                                                                       |                                                              |
+| 実装方法     | targetとsourceをJOINし、MATCHED句に応じて処理 <br> JOINの結果で予め処理を決めてから実行するのでJOIN時と実データに差があればエラー出ることもある   | INSERTして、制約に違反したらUPDATEする <br> 処理をした結果に応じてUPDATEできるので並行性能が高い |
+| 対応範囲     | DELETEに対応, 条件の比較に等号・不等号を扱える                                                                  | DELETE未対応, 条件の比較は等号により比較                                     |
+| 実行の注意事項  |                                                                                              | ON CONFLICT に指定したカラムに必ずユニーク制約が必要                             |
+
+<br>
+
+- 処理速度は https://qiita.com/fujii_masao/items/462bac9f6a107d6134c4 を参考にしました
+
+<!-- 
+つまり、両者は完全に置き換え可能という間柄ではない
+-->
+
 ---
+
+# パラレルクエリーの性能向上
 
 # Components
 
