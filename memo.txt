@@ -39,6 +39,9 @@ https://twitter.com/nori_shinoda/status/1571857779643777024
 PUBLICATION 文に WHERE 句を指定します。レプリケーション対象列を選択できるよ
 うになりました。CREATE PUBLICATION 文にテーブルに加えて列のリストを指定しま
 す。また指定した LSN の更新をスキップできるようになりました。
+    - スキーマ一括で指定できる
+        - テーブルが増えたら refresh が必要そう
+        - https://zatoima.github.io/postgresql-addtable-logical-replication.html
 
 - JSON構文のサポート
     - 
@@ -79,4 +82,12 @@ PostgreSQL15 , public スキーマの権限は データベースのオーナー
 
 - pg_upgrade
     - 9.2より前のバージョンからのサポートがなくなった
-- 
+-
+
+https://www.sraoss.co.jp/tech-blog/wp-content/uploads/2022/08/pg15_report_20220906.pdf
+https://aws.amazon.com/jp/blogs/database/best-practices-for-migrating-oracle-database-merge-statements-to-amazon-aurora-postgresql-and-amazon-rds-postgresql/
+
+
+- データベースクラスタ全体をWAL転送によってレプリケーション
+- スタンバイ側は参照のみ
+-

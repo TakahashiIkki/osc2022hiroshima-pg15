@@ -156,8 +156,8 @@ layout: center
 # 3. PostgreSQL15の新機能（抜粋）
 
 - Merge文のサポート
+- ロジカルレプリケーションの機能拡張
 - パラレルクエリの強化
-- ロジカルレプリケーションの強化
 - バージョン非互換対応（新機能ではないけど）
   - PublicスキーマのCreate権限がデフォルトからなくなる
 
@@ -279,6 +279,112 @@ table td, table th {
 
 <!-- 
 つまり、両者は完全に置き換え可能という間柄ではない
+-->
+
+---
+layout: center
+---
+
+# ロジカル（論理）レプリケーションの機能拡張
+
+---
+
+# PostgreSQLのレプリケーションについておさらい
+
+## ストリーミングレプリケーション
+
+<br>
+
+<div class="grid grid-cols-2 gap-4">
+  <div>
+    <ul>
+      <li>データベースクラスタ全体を<br>WAL転送によってレプリケーションする</li>
+      <li>レプリケーション元をプライマリ</li>
+      <li>レプリケーション先をスタンバイ</li>
+      <li>スタンバイは参照のみ</li>
+      <li>主な利用用途は<br>リードレプリカ, フェイルオーバー</li>
+    </ul>
+  </div>
+  <div>
+
+![img.png](images/streaming_replication.png)
+
+  </div>
+</div>
+
+---
+
+# PostgreSQLのレプリケーションについておさらい
+
+## ロジカルレプリケーション
+
+<br>
+
+<div class="grid grid-cols-2 gap-4 h-4/5">
+  <div>
+    <ul>
+      <li>テーブルやデータベース単位で<br>WALを操作の情報に変換した情報をレプリケーションする</li>
+      <li>レプリケーション元をパブリッシャー</li>
+      <li>レプリケーション元をサブスクライバーといい、Publicationを購読する仕組み</li>
+      <li>サブスクライバーに書き込みをしても良い（完全同期の必要がない）</li>
+      <li>OSやメジャーバージョンが異なってもレプリケーションできる</li>
+      <li>主な利用用途は<br>分析目的のデータベースを作る, バージョンアップ</li>
+    </ul>
+  </div>
+  <div class="flex flex-col place-content-around h-4/5">
+    <img class="object-contain h-10/20" src="/images/logical_replication.png" alt="__"/>
+    <img class="object-contain h-10/20" src="/images/logical_replication_how_works.png" alt="__"/>
+  </div>
+</div>
+
+<!--
+ロジカルレプリケーションの利用用途として、サブスクライバーは複数のパブリッシャーを持つ事もできるので、
+複数のデータソースから特定のパブリッシャーにデータを集約して、分析用途として役立たせるような事も可能です。
+
+また、メジャーバージョンが異なっていても、ロジカルレプリケーションであればレプリケーションできるので
+旧バージョンをパブリッシャー、新しいバージョンのインスタンスをサブスクライバーとして定義しておく事で
+安全にバージョンアップをすすめる事ができます
+-->
+
+---
+
+# ロジカル（論理）レプリケーションの機能拡張
+
+## 行フィルタ機能
+
+- PUBLICATION定義にWHERE句を指定して条件を満たす行だけのPublisherが作成できるようになった
+
+```sql
+CREATE PUBLICATION chugoku_members
+    FOR TABLE app.members WHERE address IN ('広島','岡山','島根','鳥取','山口');
+```
+<br>
+
+## 列フィルタ機能
+
+- PUBLICATION定義でカラムを絞る事で特定のカラムだけのPublisherが作成できるようになった
+
+```sql
+CREATE PUBLICATION member_emails
+    FOR TABLE app.members (email);
+```
+<br>
+
+## スキーマ対象でテーブルを一括指定
+
+```sql
+CREATE PUBLICATION app_schemas
+    FOR ALL TABLES IN SCHEMA app;
+```
+
+<!--
+
+行フィルタ機能は更新される事で条件を満たさなくなったら、サブスクリプション側では削除されます。
+逆に更新された事で条件を満たすようになったら、サブスクリプション側では追加されます。
+
+スキーマ対象のテーブル一括指定は
+データベースにある全てのテーブルを対象とかはできたんですが、今回からスキーマに所属するテーブルを一括で指定できるようになりました
+
 -->
 
 ---
