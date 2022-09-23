@@ -12,6 +12,7 @@ drawings:
   presenterOnly: true
   persist: false
 css: unocss
+layout: center
 
 ---
 
@@ -160,6 +161,12 @@ layout: center
 - パラレルクエリの強化
 - バージョン非互換対応（新機能ではないけど）
   - PublicスキーマのCreate権限がデフォルトからなくなる
+
+---
+layout: center
+---
+
+# Merge文のサポート
 
 ---
 
@@ -326,14 +333,13 @@ layout: center
       <li>テーブルやデータベース単位で<br>WALを操作の情報に変換した情報をレプリケーションする</li>
       <li>レプリケーション元をパブリッシャー</li>
       <li>レプリケーション元をサブスクライバーといい、Publicationを購読する仕組み</li>
-      <li>サブスクライバーに書き込みをしても良い（完全同期の必要がない）</li>
+      <li>サブスクライバーに書き込みをしても良い<br>（完全同期の必要がない）</li>
       <li>OSやメジャーバージョンが異なってもレプリケーションできる</li>
       <li>主な利用用途は<br>分析目的のデータベースを作る, バージョンアップ</li>
     </ul>
   </div>
-  <div class="flex flex-col place-content-around h-4/5">
-    <img class="object-contain h-10/20" src="/images/logical_replication.png" alt="__"/>
-    <img class="object-contain h-10/20" src="/images/logical_replication_how_works.png" alt="__"/>
+  <div class="flex flex-col place-content-around ">
+    <img class="object-contain" src="/images/logical_replication_how_works.png" alt="__"/>
   </div>
 </div>
 
@@ -389,205 +395,171 @@ CREATE PUBLICATION app_schemas
 
 ---
 
+# ロジカル（論理）レプリケーションの機能拡張列挙
+
+- サブスクリプション側でエラーになった時に自動で購読を止めるオプション追加
+- サブスクリプション側でLSN（WALログID）を指定して処理をスキップする事ができる機能追加
+
+これまで、煩雑な処理の後に調整していたり、ずっとエラーログが出続けるような問題について<br>
+サポートが入った
+
+---
+layout: center
+---
+
+# パラレルクエリの強化
+
+---
+
 # パラレルクエリーの性能向上
 
-# Components
+- `SELECT DISTINCT` 文でパラレルクエリが有効化！
+  - 私個人的に好きな機能の一つです
 
-<div grid="~ cols-2 gap-4">
-<div>
-
-You can use Vue components directly inside your slides.
-
-We have provided a few built-in components like `<Tweet/>` and `<Youtube/>` that you can use directly. And adding your custom components is also super easy.
-
-```html
-<Counter :count="10" />
-```
-
-<!-- ./components/Counter.vue -->
-<Counter :count="10" m="t-4" />
-
-Check out [the guides](https://sli.dev/builtin/components.html) for more.
-
-</div>
-<div>
-
-```html
-<Tweet id="1390115482657726468" />
-```
-
-<Tweet id="1390115482657726468" scale="0.65" />
-
-</div>
-</div>
+![img.png](/images/parallel_query.png)
 
 ---
 
-## class: px-20
+# その他機能
 
-# Themes
+- 正規表現関数の追加
+- ログをJSON形式で出力できるように 
+- NOT IN句のアルゴリズムを改善して高速化
+- ソートアルゴリズムが改善
+- ウィンドウ関数 ( row_number, rank, count )の性能改善
+- JSON関数の追加 ... は残念ながら見送られた
 
-Slidev comes with powerful theming support. Themes can provide styles, layouts, components, or even configurations for tools. Switching between themes by just **one edit** in your frontmatter:
+<!--
+その他、PostgreSQL15に入る機能としては記載の通りです。
+特に大きく取り上げて説明する事は省略しようかと思いますが、ざっと説明していきます。
 
-<div grid="~ cols-2 gap-2" m="-t-2">
+正規表現関数の追加
+=> 他のRDB製品で実装されている関数に合わせた仕様と同等の関数が追加されました
 
-```yaml
----
-theme: default
----
-```
+ログをJSON形式で出力できるように
+=> PostgreSQLの設定ファイルにjsonlogオプションを指定するとログがJSONで出力されます。
+自分もPostgreSQLのログパーサーとか作った事あるんですけど、パース処理書くの面倒だったりするので
+便利な機能だと思います。
 
-```yaml
----
-theme: seriph
----
-```
+NOT IN句のアルゴリズムを改善して高速化
+=> IN句ではすでにサポートされていたみたいですが、順に値を比較する構造から内部的にハッシュテーブルを作って比較する手法によって高速化が実現されてる
 
-<img border="rounded" src="https://github.com/slidevjs/themes/blob/main/screenshots/theme-default/01.png?raw=true">
-
-<img border="rounded" src="https://github.com/slidevjs/themes/blob/main/screenshots/theme-seriph/01.png?raw=true">
-
-</div>
-
-Read more about [How to use a theme](https://sli.dev/themes/use.html) and
-check out the [Awesome Themes Gallery](https://sli.dev/themes/gallery.html).
+-->
 
 ---
+layout: center
+class: "text-center"
+---
 
-## preload: false
+# バージョン非互換の変更
 
-# Animations
-
-Animations are powered by [@vueuse/motion](https://motion.vueuse.org/).
-
-```html
-<div v-motion :initial="{ x: -80 }" :enter="{ x: 0 }">Slidev</div>
-```
-
-<div class="w-60 relative mt-6">
-  <div class="relative w-40 h-40">
-    <img
-      v-motion
-      :initial="{ x: 800, y: -100, scale: 1.5, rotate: -50 }"
-      :enter="final"
-      class="absolute top-0 left-0 right-0 bottom-0"
-      src="https://sli.dev/logo-square.png"
-    />
-    <img
-      v-motion
-      :initial="{ y: 500, x: -100, scale: 2 }"
-      :enter="final"
-      class="absolute top-0 left-0 right-0 bottom-0"
-      src="https://sli.dev/logo-circle.png"
-    />
-    <img
-      v-motion
-      :initial="{ x: 600, y: 400, scale: 2, rotate: 100 }"
-      :enter="final"
-      class="absolute top-0 left-0 right-0 bottom-0"
-      src="https://sli.dev/logo-triangle.png"
-    />
-  </div>
-
-  <div
-    class="text-5xl absolute top-14 left-40 text-[#2B90B6] -z-1"
-    v-motion
-    :initial="{ x: -80, opacity: 0}"
-    :enter="{ x: 0, opacity: 1, transition: { delay: 2000, duration: 1000 } }">
-    Slidev
-  </div>
-</div>
-
-<!-- vue script setup scripts can be directly used in markdown, and will only affects current page -->
-<script setup lang="ts">
-const final = {
-  x: 0,
-  y: 0,
-  rotate: 0,
-  scale: 1,
-  transition: {
-    type: 'spring',
-    damping: 10,
-    stiffness: 20,
-    mass: 2
-  }
-}
-</script>
-
-<div
-  v-motion
-  :initial="{ x:35, y: 40, opacity: 0}"
-  :enter="{ y: 0, opacity: 1, transition: { delay: 3500 } }">
-
-[Learn More](https://sli.dev/guide/animations.html#motion)
-
-</div>
+## データベース作成時のデフォルト権限の変更
 
 ---
 
-# Diagrams
+# データベース作成時のデフォルト権限の変更
 
-You can create diagrams / graphs from textual descriptions, directly in your Markdown.
+## 元々
 
-<div class="grid grid-cols-3 gap-10 pt-4 -mb-6">
+- `public` スキーマに誰でもテーブルなどのオブジェクトを作成可能だった
+- これによって、脆弱性が発生したり、攻撃の対象となってた（ CVE-2018-1058 とか )
 
-```mermaid {scale: 0.5}
-sequenceDiagram
-    Alice->John: Hello John, how are you?
-    Note over Alice,John: A typical interaction
-```
+<br>
 
-```mermaid {theme: 'neutral', scale: 0.8}
-graph TD
-B[Text] --> C{Decision}
-C -->|One| D[Result 1]
-C -->|Two| E[Result 2]
-```
+## PostgreSQL15から 
+ 
+- データベース所有者かスーパーユーザ以外がオブジェクトを作成する権限がデフォルトから除外された
+  - 上記の脆弱性の危険性と今後も付き合っていく必要があるが、 **デフォルトから除外** なので<br>追加すれば元に戻す事はできる
+- `public` スキーマの所有者が pg_database_owner に変更された 
 
-```plantuml {scale: 0.7}
-@startuml
+---
 
-package "Some Group" {
-  HTTP - [First Component]
-  [Another Component]
-}
+データベース作成時のデフォルト権限の変更
 
-node "Other Groups" {
-  FTP - [Second Component]
-  [First Component] --> FTP
-}
+# バージョンアップ時に想定される影響
 
-cloud {
-  [Example 1]
-}
+- PostgreSQL14でデータベースの中にあるpublicスキーマを運用している場合に<br>PostgreSQL15にバージョンアップした時にどのような影響が発生するか.
+- バージョンアップ方法が2種類あるので、それぞれ比較
+
+<br>
+
+## dump & restore によるバージョンアップ
+
+- `pg_dump`で旧バージョンからダンプして`pg_restore`で新バージョンにリストアを行う方式
+- **新しい空のデータベースを作った上でリストアする** ので、publicスキーマの書き込み権限は無く<br>publicスキーマを使用している場合は影響を受ける
+
+<br>
+
+## pg_upgrade
+
+- すべてが以前のバージョンと同じように**コピー**される
+- 旧バージョン時点でpublicスキーマへの書き込み権限があれば、そのまま継続利用できる
+
+<!-- 
+旧バージョンの互換を切る内容ではありますので
+旧バージョンから新バージョンにバージョンアップをした時の影響について調べてみました.
+
+まず、PostgreSQLに依存した形でできるバージョンアップ手法は2種類です。
+dump -> restore , pg_upgrade という選択肢になります.
+
+-->
+
+---
+
+データベース作成時のデフォルト権限の変更
+
+# AWSでアップデートをする時の挙動
+
+- RDS for PostgreSQLではバージョンアップをコンソールから実行できる
+- そこでは `pg_upgrade` を利用してバージョンアップが行われているので、旧バージョンのまま利用できる 
+- ちなみに...
+  - GCP (Cloud SQL for PostgreSQL) もコンソールでバージョンアップでき、 `pg_upgrate` が使われてる 
+  - Azureは、コンソールでメジャーバージョンアップには対応してないので、`dump & restore` 方式を使う必要がある
+- 旧バージョンのまま利用できる とは言いつつも **publicスキーマの書き込み権限が脆弱性の起因となる** 事についてはちゃんと考慮の上、運用していきましょう。
+
+--- 
+
+# 最後に...
+
+- PostgreSQL15では、他RDBで使えてる機能を積極サポートしながらも、PostgreSQL自体の強み機能も改善していくようなバージョンアップと感じています。
+  - Cloud移行に伴って商用DBからPostgreSQLに乗り換えて頂く事も多い事から他RDBで使えている機能の積極サポートはありがたそう. 
+  - Docker公式イメージでPostgreSQL15 beta版を利用する事もできるので興味があれば試してみてください！
+- PostgreSQL15のGAリリースは 2022-10-06です！！ お楽しみに！！
+
+---
+
+# 参考文献
+
+- PostgreSQL15 検証レポート SRAOSS 
+  - https://www.sraoss.co.jp/tech-blog/wp-content/uploads/2022/08/pg15_report_20220906.pdf
+- ロジカルレプリケーションの紹介 (1) SRA OSS Tech Blog
+  - https://www.sraoss.co.jp/tech-blog/pgsql/logical-replication-1/
+- Changes to the public schema in PostgreSQL 15 and how to handle upgrades
+  - https://andreas.scherbaum.la/blog/archives/1120-Changes-to-the-public-schema-in-PostgreSQL-15-and-how-to-handle-upgrades.html
+- PostgreSQL14文書
+  - https://www.postgresql.jp/document/14/html/index.html
+- PostgreSQL15Document
+  - https://www.postgresql.org/docs/15/
 
 
-database "MySql" {
-  folder "This is my folder" {
-    [Folder 3]
-  }
-  frame "Foo" {
-    [Frame 4]
-  }
-}
+---
 
+# 参考文献
 
-[Another Component] --> [Example 1]
-[Example 1] --> [Folder 3]
-[Folder 3] --> [Frame 4]
-
-@enduml
-```
-
-</div>
-
-[Learn More](https://sli.dev/guide/syntax.html#diagrams)
+- PostgreSQL 15 開発最新情報
+  - https://www.slideshare.net/masahikosawada98/postgresql-15
+- PostgreSQL 15 最新情報解説
+  - https://www.sraoss.co.jp/wp-content/uploads/files/event_seminar/material/2022/PG15_sraoss_techwebinar_20220902.pdf
+- PostgreSQL の INSERT ON CONFLICT と MERGE の簡易性能比較
+  - https://qiita.com/fujii_masao/items/462bac9f6a107d6134c4
+- PostgreSQL 15 新機能検証結果 (Beta 1)
+  - https://h50146.www5.hpe.com/products/software/oe/linux/mainstream/support/lcc/pdf/PostgreSQL_15_Beta_1_New_Features_ja_20220524-1.pdf
+- Wikipedia MERGE (SQL)
+  - https://ja.wikipedia.org/wiki/MERGE_(SQL)
 
 ---
 layout: center
 class: text-center
 ---
 
-# Learn More
-
-[Documentations](https://sli.dev) · [GitHub](https://github.com/slidevjs/slidev) · [Showcases](https://sli.dev/showcases.html)
+# ご清聴ありがとうございました
