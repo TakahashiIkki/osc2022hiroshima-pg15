@@ -3,6 +3,7 @@ theme: seriph
 class: "text-center"
 highlighter: shiki
 background: ''
+colorSchema: 'dark'
 lineNumbers: false
 info: |
   アプリケーションエンジニアから見たPostgreSQL15 の新機能
