@@ -83,7 +83,7 @@ class: text-center
       <li>代表的なオープンソースのRDBMSの一つ</li>
       <li>もともと、大学の研究用に開発された研究用のRDBMSの <code>ingress</code> が元となっている。</li>
       <li>PostgreSQL開発コミュニティによって開発が行われていて、約1年弱の開発期間を経た後、毎年9~10月頃にメジャーバージョンがリリースされている。</li>
-      <li>今年は<code>PostgreSQL15</code>のリリースに向けて開発が行われており、2022-10-06にGAの予定が発表された</li>
+      <li>今年は<code>PostgreSQL15</code>のリリースに向けて開発が行われており、2022-10-13にGAの予定が発表された</li>
     </ul>
   </div>
   <div>
@@ -382,7 +382,7 @@ layout: center
 
 ## 行フィルタ機能
 
-- PUBLICATION定義にWHERE句を指定して条件を満たす行だけのPublisherが作成できるようになった
+- PUBLICATION定義にWHERE句を指定して条件を満たす行だけのPUBLICATIONが作成できるようになった
 
 ```sql
 CREATE PUBLICATION chugoku_members
@@ -392,7 +392,7 @@ CREATE PUBLICATION chugoku_members
 
 ## 列フィルタ機能
 
-- PUBLICATION定義でカラムを絞る事で特定のカラムだけのPublisherが作成できるようになった
+- PUBLICATION定義でカラムを絞る事で特定のカラムだけのPUBLICATIONが作成できるようになった
 
 ```sql
 CREATE PUBLICATION member_emails
@@ -583,7 +583,7 @@ dump -> restore , pg_upgrade という選択肢になります.
 - PostgreSQL15では、他RDBで使えてる機能を積極サポートしながらも、PostgreSQL自体の強み機能も改善していくようなバージョンアップと感じています。
   - Cloud移行に伴って商用DBからPostgreSQLに乗り換えて頂く事も多い事から他RDBで使えている機能の積極サポートはありがたそう. 
   - Docker公式イメージでPostgreSQL15 beta版を利用する事もできるので興味があれば試してみてください！
-- PostgreSQL15のGAリリースは 2022-10-06です！！ お楽しみに！！
+- PostgreSQL15のGAリリースは 2022-10-13です！！ お楽しみに！！
 
 ---
 
